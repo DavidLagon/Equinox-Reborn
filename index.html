@@ -8,7 +8,6 @@
   <meta name="description" content="Compte à rebours avant la soirée Equinox Reborn" />
 
   <style>
-    /* ====== MOBILE-FIRST ====== */
     :root{
       --bg:#0a0a0a; --fg:#fff; --glass:rgba(0,0,0,.55);
       --accent:#e6e6e6; --radius:16px; --gap:clamp(12px, 4vw, 24px);
@@ -20,10 +19,9 @@
       margin:0; color:var(--fg);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, "Noto Sans";
       background: var(--bg) center/cover no-repeat fixed;
-      /* L'image est définie par JS après détection d'extension */
+      background-image: url("./Fly6122025QRCode.jpg"); /* ✅ ton image */
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
-    /* voile pour lisibilité sur fond */
     body::before{
       content:""; position:fixed; inset:0;
       background: radial-gradient(ellipse at center, rgba(0,0,0,.28), rgba(0,0,0,.78));
@@ -39,12 +37,12 @@
     }
     .subtitle{ margin:0 0 1.5rem; opacity:.9; font-size: clamp(13px, 4vw, 18px); }
 
-    /* ====== COUNTDOWN ====== */
+    /* COUNTDOWN */
     .countdown{
       display:flex; gap: var(--gap); justify-content:center; flex-wrap:wrap;
     }
     .unit{
-      min-width: 42vw; /* large lisible sur mobile */
+      min-width: 42vw;
       padding: var(--pad);
       border-radius: var(--radius);
       background: var(--glass); backdrop-filter: blur(6px);
@@ -60,7 +58,7 @@
       font-size: clamp(10px, 3.5vw, 12px); color: var(--accent); opacity:.95;
     }
 
-    /* ====== LINE-UP ====== */
+    /* LINE-UP */
     .djs{
       margin-top: 1.8rem; text-align:left;
       border-radius: var(--radius); background: var(--glass);
@@ -77,7 +75,6 @@
     .djs-content{ display:block; }
     .djs[hidden-content="true"] .djs-content{ display:none; }
 
-    /* Slider tactile compact sur mobile */
     .dj-track{
       display:flex; gap:.6rem; padding:.8rem .9rem 1rem; overflow-x:auto;
       scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;
@@ -92,7 +89,6 @@
     .badge{ opacity:.85; font-size:.92em; margin-left:.5ch; }
     .birthday{ display:block; margin:.25rem .9rem 1rem; font-style:italic; opacity:.92; text-align:center; font-size: clamp(12px, 3.6vw, 16px); }
 
-    /* ≥ 720px : 2 colonnes sans slider */
     @media (min-width:720px){
       .unit{ min-width: 160px; }
       .dj-track{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem .6rem; overflow:visible; }
@@ -111,11 +107,6 @@
       border-radius: var(--radius); background: var(--glass);
       display:inline-block; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-
-    /* Respect des préférences d’accessibilité */
-    @media (prefers-reduced-motion: reduce){
-      *{scroll-behavior:auto}
-    }
   </style>
 </head>
 <body>
@@ -126,7 +117,7 @@
 
       <div id="countdown" class="countdown" aria-live="polite"></div>
 
-      <!-- Line-up repliable -->
+      <!-- Line-up -->
       <section class="djs" id="lineup" hidden-content="false" aria-labelledby="lineup-title">
         <div class="djs-header">
           <h2 class="djs-title" id="lineup-title">Line-up</h2>
@@ -152,16 +143,14 @@
   </div>
 
   <script>
-    // ====== CONFIG ======
-    // Début de soirée : 6 déc. 2025 à 22:00 (Europe/Paris, UTC+1 en décembre)
+    // Début de soirée : 6 déc. 2025 à 22:00 (UTC+1)
     const eventDate = new Date("2025-12-06T22:00:00+01:00");
     const startedText = "C'est parti !";
     const pad = n => String(n).padStart(2,"0");
 
-    // Countdown
     function renderCountdown(ms){
       const el = document.getElementById("countdown");
-      if(ms <= 0){ el.innerHTML = `<div class="started" role="status">${startedText}</div>`; return; }
+      if(ms <= 0){ el.innerHTML = `<div class="started">${startedText}</div>`; return; }
       const s = Math.floor(ms/1000),
             d = Math.floor(s/86400),
             h = Math.floor((s%86400)/3600),
@@ -178,39 +167,17 @@
     tick();
     const timer = setInterval(()=>{ tick(); if(new Date()>=eventDate) clearInterval(timer); }, 1000);
 
-    // Repli/dépli Line-up (persistance session)
+    // Toggle Line-up
     const toggleBtn = document.getElementById('toggleLineup');
     const lineup = document.getElementById('lineup');
-    const KEY='lineup-collapsed';
-    try{
-      const collapsed = sessionStorage.getItem(KEY)==='1';
-      if(collapsed){ lineup.setAttribute('hidden-content','true'); toggleBtn.setAttribute('aria-expanded','false'); toggleBtn.textContent='Déplier'; }
-    }catch(e){}
     toggleBtn.addEventListener('click',()=>{
       const hidden = lineup.getAttribute('hidden-content')==='true';
       if(hidden){
         lineup.setAttribute('hidden-content','false'); toggleBtn.textContent='Replier'; toggleBtn.setAttribute('aria-expanded','true');
-        try{sessionStorage.setItem(KEY,'0');}catch(e){}
       }else{
         lineup.setAttribute('hidden-content','true'); toggleBtn.textContent='Déplier'; toggleBtn.setAttribute('aria-expanded','false');
-        try{sessionStorage.setItem(KEY,'1');}catch(e){}
       }
     });
-
-    // ====== Image de fond : détection d'extension ======
-    // Tu m'as donné "root\Fly6122025" → sur le web on utilise des "/"
-    const basePath = "./root/Fly6122025";
-    const exts = ["jpg","jpeg","png","webp","gif"];
-
-    function tryLoad(i=0){
-      if(i >= exts.length){ console.warn("Image introuvable pour", basePath); return; }
-      const url = `${basePath}.${exts[i]}`;
-      const img = new Image();
-      img.onload = () => { document.body.style.backgroundImage = `url("${url}")`; };
-      img.onerror = () => tryLoad(i+1);
-      img.src = url + `?v=${Date.now()}`; // bust cache pendant les tests
-    }
-    tryLoad();
   </script>
 </body>
 </html>

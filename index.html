@@ -19,7 +19,7 @@
       margin:0; color:var(--fg);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, "Noto Sans";
       background: var(--bg) center/cover no-repeat fixed;
-      background-image: url("./Fly6122025.jpg"); /* ✅ flyer corrigé */
+      /* L’image est ajoutée par JS pour forcer un rafraîchissement (anti-cache) */
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     body::before{
@@ -115,6 +115,7 @@
 
       <div id="countdown" class="countdown" aria-live="polite"></div>
 
+      <!-- Line-up -->
       <section class="djs" id="lineup" hidden-content="false" aria-labelledby="lineup-title">
         <div class="djs-header">
           <h2 class="djs-title" id="lineup-title">Line-up</h2>
@@ -123,7 +124,7 @@
         <div class="djs-content" id="lineup-content">
           <div class="dj-track">
             <div class="dj">LEELOO <span class="badge">(Hardcoholics)</span></div>
-            <div class="dj">INGLER</div>
+            <div class="dj">INGLER <span class="badge">(Laurent Hô)</span></div>
             <div class="dj">LA PESTE</div>
             <div class="dj">LE TALIUM</div>
             <div class="dj">SPEEDLOADER</div>
@@ -140,6 +141,7 @@
   </div>
 
   <script>
+    // Début de soirée : 6 déc. 2025 à 22:00 (UTC+1)
     const eventDate = new Date("2025-12-06T22:00:00+01:00");
     const startedText = "C'est parti !";
     const pad = n => String(n).padStart(2,"0");
@@ -163,6 +165,7 @@
     tick();
     const timer = setInterval(()=>{ tick(); if(new Date()>=eventDate) clearInterval(timer); }, 1000);
 
+    // Toggle Line-up
     const toggleBtn = document.getElementById('toggleLineup');
     const lineup = document.getElementById('lineup');
     toggleBtn.addEventListener('click',()=>{
@@ -173,6 +176,11 @@
         lineup.setAttribute('hidden-content','true'); toggleBtn.textContent='Déplier'; toggleBtn.setAttribute('aria-expanded','false');
       }
     });
+
+    // === Image de fond avec anti-cache ===
+    const flyer = "./Fly6122025.jpg";
+    const version = Date.now(); // timestamp unique
+    document.body.style.backgroundImage = `url("${flyer}?v=${version}")`;
   </script>
 </body>
 </html>

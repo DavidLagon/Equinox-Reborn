@@ -82,8 +82,26 @@
       opacity:.95;
     }
 
-    .location{
+    .djs{
       margin-top: 2.5rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      font-size: clamp(14px, 1.8vw, 18px);
+      line-height:1.6;
+    }
+    .djs strong{
+      display:block;
+      margin-bottom:.5rem;
+      font-size: clamp(16px, 2vw, 22px);
+      text-transform:uppercase;
+    }
+
+    .location{
+      margin-top: 2rem;
       font-size: clamp(16px, 2vw, 22px);
       font-weight: 600;
       background: var(--glass);
@@ -117,6 +135,19 @@
       <p class="subtitle">Compte à rebours avant la soirée</p>
 
       <div id="countdown" class="countdown" aria-live="polite"></div>
+
+      <!-- Liste DJs -->
+      <div class="djs">
+        <strong>Line-up</strong>
+        LEELOO (Hardcoholics)<br>
+        INGLER<br>
+        LA PESTE<br>
+        LE TALIUM<br>
+        SPEEDLOADER<br>
+        KDX<br>
+        DAVID LAGON<br><br>
+        <em>Birthday David Lagon</em>
+      </div>
 
       <!-- Texte lieu secret -->
       <p class="location">Lieu secret dévoilé au dernier moment sur cette page</p>

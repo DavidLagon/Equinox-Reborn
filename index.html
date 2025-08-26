@@ -13,6 +13,7 @@
       --accent: #e6e6e6;
       --gap: clamp(12px, 2.2vw, 24px);
       --radius: 16px;
+      --cardPad: clamp(10px, 2.6vw, 14px);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -28,7 +29,7 @@
     body::before{
       content:"";
       position:fixed; inset:0;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,.35), rgba(0,0,0,.75));
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.35), rgba(0,0,0,.78));
       pointer-events:none;
     }
 
@@ -82,26 +83,79 @@
       opacity:.95;
     }
 
+    /* --- Line-up bloc --- */
     .djs{
-      margin-top: 2.5rem;
-      padding: 1rem 1.5rem;
+      margin-top: 2.2rem;
       border-radius: var(--radius);
       background: var(--glass);
       backdrop-filter: blur(6px);
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      font-size: clamp(14px, 1.8vw, 18px);
-      line-height:1.6;
+      text-align: left;
     }
-    .djs strong{
-      display:block;
-      margin-bottom:.5rem;
-      font-size: clamp(16px, 2vw, 22px);
-      text-transform:uppercase;
+    .djs-header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:.75rem; padding: .9rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .djs-title{
+      margin:0; text-transform:uppercase; letter-spacing:.08em;
+      font-weight:800; font-size: clamp(14px, 1.8vw, 18px);
+    }
+    .toggle{
+      appearance:none; border:1px solid rgba(255,255,255,.2);
+      background: transparent; color:var(--fg);
+      padding:.45rem .75rem; border-radius: 999px;
+      font-size: 13px; cursor:pointer;
+    }
+
+    /* Contenu repliable */
+    .djs-content{ display:block; }
+    .djs[hidden-content="true"] .djs-content{ display:none; }
+
+    /* Liste mobile = slider horizontal, cartes compactes */
+    .dj-track{
+      display:flex; gap:.75rem;
+      padding: .9rem 1rem 1.1rem;
+      overflow-x:auto; overscroll-behavior-x: contain;
+      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
+    .dj{
+      scroll-snap-align:start;
+      white-space:nowrap;
+      padding: var(--cardPad) calc(var(--cardPad) + 2px);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,.35);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25) inset, 0 8px 20px rgba(0,0,0,.25);
+      font-size: clamp(13px, 1.7vw, 16px);
+    }
+    .badge{
+      display:inline-block; margin-left:.5ch; opacity:.85; font-size:.92em;
+    }
+    .birthday{
+      display:block; margin: .25rem 1rem 0;
+      font-style:italic; opacity:.92; text-align:center;
+      font-size: clamp(13px, 1.7vw, 16px);
+    }
+
+    /* ≥ 700px : grille 2 colonnes pour tout voir sans slider */
+    @media (min-width: 700px){
+      .dj-track{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:.75rem .75rem;
+        overflow:visible;
+      }
+      .dj{
+        white-space:normal;
+      }
+      .birthday{ text-align:left; margin-left: 1rem; }
     }
 
     .location{
-      margin-top: 2rem;
+      margin-top: 1.6rem;
       font-size: clamp(16px, 2vw, 22px);
       font-weight: 600;
       background: var(--glass);
@@ -109,10 +163,11 @@
       border-radius: var(--radius);
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      text-align:center;
     }
 
     .footer{
-      margin-top: 2rem;
+      margin-top: 1.6rem;
       font-size: 13px;
       opacity:.85;
     }
@@ -126,6 +181,11 @@
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
+
+    /* Motion respect */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+    }
   </style>
 </head>
 <body>
@@ -136,18 +196,26 @@
 
       <div id="countdown" class="countdown" aria-live="polite"></div>
 
-      <!-- Liste DJs -->
-      <div class="djs">
-        <strong>Line-up</strong>
-        LEELOO (Hardcoholics)<br>
-        INGLER<br>
-        LA PESTE<br>
-        LE TALIUM<br>
-        SPEEDLOADER<br>
-        KDX<br>
-        DAVID LAGON<br><br>
-        <em>Birthday David Lagon</em>
-      </div>
+      <!-- Bloc Line-up (repliable) -->
+      <section class="djs" id="lineup" hidden-content="false" aria-labelledby="lineup-title">
+        <div class="djs-header">
+          <h2 class="djs-title" id="lineup-title">Line-up</h2>
+          <button class="toggle" id="toggleLineup" aria-expanded="true" aria-controls="lineup-content">Replier</button>
+        </div>
+        <div class="djs-content" id="lineup-content">
+          <!-- Mobile: slider tactile | Desktop: 2 colonnes -->
+          <div class="dj-track">
+            <div class="dj">LEELOO <span class="badge">(Hardcoholics)</span></div>
+            <div class="dj">INGLER</div>
+            <div class="dj">LA PESTE</div>
+            <div class="dj">LE TALIUM</div>
+            <div class="dj">SPEEDLOADER</div>
+            <div class="dj">KDX</div>
+            <div class="dj">DAVID LAGON</div>
+          </div>
+          <span class="birthday">Birthday David Lagon</span>
+        </div>
+      </section>
 
       <!-- Texte lieu secret -->
       <p class="location">Lieu secret dévoilé au dernier moment sur cette page</p>
@@ -157,10 +225,12 @@
   </div>
 
   <script>
+    // === Config ===
     const eventDate = new Date("2025-12-06T22:00:00+01:00");
     const startedText = "C'est parti !";
-    const pad = n => String(n).padStart(2, "0");
 
+    // Countdown
+    const pad = n => String(n).padStart(2, "0");
     function renderCountdown(ms){
       const el = document.getElementById("countdown");
       if(ms <= 0){
@@ -180,16 +250,45 @@
         <div class="unit"><div class="num">${pad(seconds)}</div><div class="label">Secondes</div></div>
       `;
     }
-
     function tick(){
-      const now = new Date();
-      renderCountdown(eventDate - now);
+      renderCountdown(eventDate - new Date());
     }
     tick();
     const timer = setInterval(() => {
       tick();
       if (new Date() >= eventDate) clearInterval(timer);
     }, 1000);
+
+    // Repli/dépli du line-up (persiste durant la session)
+    const toggleBtn = document.getElementById('toggleLineup');
+    const lineup = document.getElementById('lineup');
+    const content = document.getElementById('lineup-content');
+    const KEY = 'lineup-collapsed';
+
+    // Restaurer l'état
+    try{
+      const collapsed = sessionStorage.getItem(KEY) === '1';
+      if(collapsed){
+        lineup.setAttribute('hidden-content','true');
+        toggleBtn.setAttribute('aria-expanded','false');
+        toggleBtn.textContent = 'Déplier';
+      }
+    }catch(e){}
+
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = lineup.getAttribute('hidden-content') === 'true';
+      if(isHidden){
+        lineup.setAttribute('hidden-content','false');
+        toggleBtn.textContent = 'Replier';
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        try{ sessionStorage.setItem(KEY, '0'); }catch(e){}
+      }else{
+        lineup.setAttribute('hidden-content','true');
+        toggleBtn.textContent = 'Déplier';
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        try{ sessionStorage.setItem(KEY, '1'); }catch(e){}
+      }
+    });
   </script>
 </body>
 </html>

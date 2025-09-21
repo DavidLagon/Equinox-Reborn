@@ -214,18 +214,18 @@
     const version = Date.now();
     document.body.style.backgroundImage = `url("${flyer}?v=${version}")`;
 
-    // ✅ Compteur invisible (visiteur unique avec CountAPI)
+    // ✅ Compteur invisible (visiteur unique avec countapi.xyz)
     const COUNTER_NS  = 'equinox-reborn.github.io';
     const COUNTER_KEY = 'pageviews';
     const firstVisit = !localStorage.getItem('er_visit');
     if (firstVisit) {
       localStorage.setItem('er_visit', '1');
-      fetch(`https://api.countapi.xyz/hit/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
+      fetch(`https://countapi.xyz/hit/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
         .then(r => r.json())
         .then(d => console.log('Visiteurs uniques:', d.value))
         .catch(()=>{});
     } else {
-      fetch(`https://api.countapi.xyz/get/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
+      fetch(`https://countapi.xyz/get/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
         .then(r => r.json())
         .then(d => console.log('Visiteurs uniques:', d.value))
         .catch(()=>{});

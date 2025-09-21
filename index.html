@@ -28,7 +28,7 @@
       pointer-events:none;
     }
 
-    /* ✅ Adaptation mobile : garder toute l’image */
+    /* ✅ Sur smartphone, garder l’image entière */
     @media (max-width: 768px) {
       body {
         background: var(--bg) center/contain no-repeat fixed;
@@ -210,9 +210,26 @@
     });
 
     // Image de fond avec anti-cache
-    const flyer = "./Fly6122025_V3.jpg";
+    const flyer = "./Fly6122025_V4.jpg";
     const version = Date.now();
     document.body.style.backgroundImage = `url("${flyer}?v=${version}")`;
+
+    // ✅ Compteur invisible (visiteur unique avec CountAPI)
+    const COUNTER_NS  = 'equinox-reborn.github.io';
+    const COUNTER_KEY = 'pageviews';
+    const firstVisit = !localStorage.getItem('er_visit');
+    if (firstVisit) {
+      localStorage.setItem('er_visit', '1');
+      fetch(`https://api.countapi.xyz/hit/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
+        .then(r => r.json())
+        .then(d => console.log('Visiteurs uniques:', d.value))
+        .catch(()=>{});
+    } else {
+      fetch(`https://api.countapi.xyz/get/${COUNTER_NS}/${COUNTER_KEY}`, {cache:'no-store'})
+        .then(r => r.json())
+        .then(d => console.log('Visiteurs uniques:', d.value))
+        .catch(()=>{});
+    }
   </script>
 </body>
 </html>

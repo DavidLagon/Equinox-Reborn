@@ -28,6 +28,13 @@
       pointer-events:none;
     }
 
+    /* ✅ Adaptation mobile : garder toute l’image */
+    @media (max-width: 768px) {
+      body {
+        background: var(--bg) center/contain no-repeat fixed;
+      }
+    }
+
     .wrap{ min-height:100%; display:grid; place-items:center; padding: 6vh var(--gap); }
     main{ width:min(100%, 980px); text-align:center; }
 
@@ -203,7 +210,7 @@
     });
 
     // Image de fond avec anti-cache
-    const flyer = "./Fly6122025_V4.jpg";
+    const flyer = "./Fly6122025_V3.jpg";
     const version = Date.now();
     document.body.style.backgroundImage = `url("${flyer}?v=${version}")`;
   </script>

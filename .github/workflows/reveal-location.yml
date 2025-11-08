@@ -1,0 +1,46 @@
+name: Reveal Location (J-6 18:00 Europe/Paris)
+
+on:
+  schedule:
+    # 30/11/2025 17:00 UTC = 18:00 Europe/Paris (J-6)
+    - cron: "0 17 30 11 *"
+  workflow_dispatch: {}  # permet un lancement manuel pour tester
+
+permissions:
+  contents: write
+
+jobs:
+  reveal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Sécurité : n’exécuter que pour l’année 2025
+      - name: Guard correct year
+        run: |
+          YEAR=$(date -u +%Y)
+          if [ "$YEAR" != "2025" ]; then
+            echo "Not target year ($YEAR). Exiting."
+            exit 0
+          fi
+
+      - name: Write location.json from secrets
+        run: |
+          if [ -n "${{ secrets.LOCATION_HTML }}" ]; then
+            printf '{ "html": "%s" }\n' "${{ secrets.LOCATION_HTML }}" > location.json
+          elif [ -n "${{ secrets.LOCATION_VALUE }}" ]; then
+            printf '{ "location": "%s" }\n' "${{ secrets.LOCATION_VALUE }}" > location.json
+          else
+            echo "❌ Missing LOCATION_HTML or LOCATION_VALUE secret." >&2
+            exit 1
+          fi
+          echo "location.json content:"
+          cat location.json
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add location.json
+          git commit -m "Reveal location (J-6 18:00 Europe/Paris)"
+          git push

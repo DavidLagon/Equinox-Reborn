@@ -122,6 +122,9 @@
     const eventDate = new Date("2025-12-06T22:00:00+01:00");
     const REVEAL_DAYS_BEFORE = 6;   // J-6
     const REVEAL_HOUR_LOCAL  = 18;  // 18:00
+    // === MODE TEST : révéler le lieu dès maintenant ===
+    const FORCE_REVEAL = true;
+
     const startedText = "C'est parti !";
     const pad = n => String(n).padStart(2, "0");
 
@@ -164,11 +167,16 @@
     const REVEAL_POLL_MS = 30000;
 
     const revealAt = (() => {
-      const d = new Date(eventDate);
-      d.setDate(d.getDate() - REVEAL_DAYS_BEFORE);
-      d.setHours(REVEAL_HOUR_LOCAL, 0, 0, 0);
-      return d;
-    })();
+  if (typeof FORCE_REVEAL !== "undefined" && FORCE_REVEAL) {
+    // Simule que la date de révélation est déjà passée
+    return new Date(Date.now() - 60 * 1000);
+  }
+  const d = new Date(eventDate);
+  d.setDate(d.getDate() - REVEAL_DAYS_BEFORE);
+  d.setHours(REVEAL_HOUR_LOCAL, 0, 0, 0);
+  return d;
+})();
+
 
     async function tryRevealLocation(){
       if(new Date() < revealAt) return false;

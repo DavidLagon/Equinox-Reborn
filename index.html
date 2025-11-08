@@ -6,7 +6,6 @@
   <meta name="theme-color" content="#0a0a0a" />
   <title>Equinox Reborn — Compte à rebours</title>
   <meta name="description" content="Compte à rebours avant la soirée Equinox Reborn" />
-
   <style>
     :root{
       --bg:#0a0a0a; --fg:#fff; --glass:rgba(0,0,0,.55);
@@ -27,10 +26,7 @@
       background: radial-gradient(ellipse at center, rgba(0,0,0,.28), rgba(0,0,0,.78));
       pointer-events:none;
     }
-    /* ✅ Sur smartphone, garder l’image entière */
-    @media (max-width: 768px) {
-      body { background: var(--bg) center/contain no-repeat fixed; }
-    }
+    @media (max-width:768px){ body{ background: var(--bg) center/contain no-repeat fixed; } }
 
     .wrap{ min-height:100%; display:grid; place-items:center; padding: 6vh var(--gap); }
     main{ width:min(100%, 980px); text-align:center; }
@@ -40,50 +36,46 @@
 
     .countdown{ display:flex; gap: var(--gap); justify-content:center; flex-wrap:wrap; }
     .unit{ min-width: 42vw; padding: var(--pad); border-radius: var(--radius); background: var(--glass);
-      backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
-    .num{ font-variant-numeric: tabular-nums; font-weight: 800; line-height:1; font-size: clamp(34px, 12vw, 64px); }
-    .label{ margin-top:.35rem; text-transform:uppercase; letter-spacing:.12em;
-      font-size: clamp(10px, 3.5vw, 12px); color: var(--accent); opacity:.95; }
+      backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .num{ font-variant-numeric: tabular-nums; font-weight:800; line-height:1; font-size: clamp(34px, 12vw, 64px); }
+    .label{ margin-top:.35rem; text-transform:uppercase; letter-spacing:.12em; font-size: clamp(10px, 3.5vw, 12px); color:var(--accent); opacity:.95; }
 
     .djs{ margin-top: 1.8rem; text-align:left; border-radius: var(--radius); background: var(--glass);
-      border: 1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+      border:1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
     .djs-header{ display:flex; align-items:center; justify-content:space-between; gap:.75rem;
       padding:.8rem .9rem; border-bottom:1px solid rgba(255,255,255,.1); }
     .djs-title{ margin:0; text-transform:uppercase; letter-spacing:.08em; font-weight:800; font-size: clamp(13px, 4vw, 18px); }
     .toggle{ appearance:none; border:1px solid rgba(255,255,255,.2); background:transparent; color:var(--fg);
-      padding:.45rem .8rem; border-radius:999px; font-size: 13px; cursor:pointer; }
+      padding:.45rem .8rem; border-radius:999px; font-size:13px; cursor:pointer; }
     .djs-content{ display:block; }
     .djs[hidden-content="true"] .djs-content{ display:none; }
 
-    .dj-track{ display:flex; gap:.6rem; padding:.8rem .9rem 1rem; overflow-x:auto;
-      scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; }
+    .dj-track{ display:flex; gap:.6rem; padding:.8rem .9rem 1rem; overflow-x:auto; scroll-snap-type:x proximity; }
     .dj{ scroll-snap-align:start; white-space:nowrap; padding:.6rem .8rem; border:1px solid rgba(255,255,255,.18);
       border-radius:12px; background:rgba(0,0,0,.35); box-shadow: inset 0 6px 18px rgba(0,0,0,.25), 0 8px 20px rgba(0,0,0,.25);
       font-size: clamp(13px, 3.7vw, 16px); }
     .badge{ opacity:.85; font-size:.92em; margin-left:.5ch; }
-    .birthday{ display:block; margin:.25rem .9rem 1rem; font-style:italic; opacity:.92; text-align:center;
-      font-size: clamp(12px, 3.6vw, 16px); }
+    .birthday{ display:block; margin:.25rem .9rem 1rem; font-style:italic; opacity:.92; text-align:center; font-size: clamp(12px, 3.6vw, 16px); }
 
     @media (min-width:720px){
-      .unit{ min-width: 160px; }
-      .dj-track{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem .6rem; overflow:visible; }
+      .unit{ min-width:160px; }
+      .dj-track{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; overflow:visible; }
       .dj{ white-space:normal; }
       .birthday{ text-align:left; }
     }
 
-    .tickets{ margin: 1.8rem auto 0; }
-    .tickets a{ display:inline-block; padding:.9rem 1.6rem; font-size: clamp(14px, 4vw, 18px);
-      font-weight:700; color:#fff; text-decoration:none; border-radius: 999px; background: var(--btn-bg);
-      transition: background .3s, transform .2s; box-shadow: 0 8px 20px rgba(255,0,64,.4); }
-    .tickets a:hover{ background: var(--btn-bg-hover); transform: scale(1.05); }
+    .tickets{ margin:1.8rem auto 0; }
+    .tickets a{ display:inline-block; padding:.9rem 1.6rem; font-size:clamp(14px, 4vw, 18px);
+      font-weight:700; color:#fff; text-decoration:none; border-radius:999px; background:var(--btn-bg);
+      transition: background .3s, transform .2s; box-shadow:0 8px 20px rgba(255,0,64,.4); }
+    .tickets a:hover{ background:var(--btn-bg-hover); transform:scale(1.05); }
 
-    .location{ margin-top: 1.6rem; font-size: clamp(15px, 4.2vw, 20px); font-weight:600; background: var(--glass);
-      padding:.8rem 1.1rem; border-radius: var(--radius); border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35); text-align:center; }
-    .footer{ margin-top: 1.2rem; font-size: 12px; opacity:.85; }
-    .started{ font-size: clamp(24px, 8vw, 40px); font-weight:800; padding:.55rem 1rem; border-radius: var(--radius);
-      background: var(--glass); display:inline-block; border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .location{ margin-top:1.6rem; font-size:clamp(15px, 4.2vw, 20px); font-weight:600; background:var(--glass);
+      padding:.8rem 1.1rem; border-radius:var(--radius); border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 30px rgba(0,0,0,.35); text-align:center; }
+    .footer{ margin-top:1.2rem; font-size:12px; opacity:.85; }
+    .started{ font-size:clamp(24px, 8vw, 40px); font-weight:800; padding:.55rem 1rem; border-radius:var(--radius);
+      background:var(--glass); display:inline-block; border:1px solid rgba(255,255,255,.12); box-shadow:0 10px 30px rgba(0,0,0,.35); }
   </style>
 </head>
 <body>
@@ -103,7 +95,7 @@
         <div class="djs-content" id="lineup-content">
           <div class="dj-track">
             <div class="dj">LEELOO <span class="badge">(Hardcoholics)</span></div>
-            <div class="dj">INGLER</div>
+            <div class="dj">INGLER <span class="badge">(Laurent Hô)</span></div>
             <div class="dj">LA PESTE</div>
             <div class="dj">LE TALIUM</div>
             <div class="dj">SPEEDLOADER</div>
@@ -118,17 +110,22 @@
         <a href="https://billetto.fr/e/equinox-reborn-billets-1640949" target="_blank" rel="noopener">🎟️ Accéder aux préventes</a>
       </div>
 
-      <p class="location">Lieu secret dévoilé au dernier moment sur cette page</p>
+      <!-- Lieu : id nécessaire pour l’injection -->
+      <p id="location" class="location">Lieu secret dévoilé au dernier moment sur cette page</p>
+
       <p class="footer">6 décembre 2025 — 22:00 → 06:00 (Europe/Paris)</p>
     </main>
   </div>
 
   <script>
-    // Début de soirée : 6 déc. 2025 à 22:00 (UTC+1)
+    // ===== Dates (Europe/Paris en déc. = UTC+1)
     const eventDate = new Date("2025-12-06T22:00:00+01:00");
+    const REVEAL_DAYS_BEFORE = 6;   // J-6
+    const REVEAL_HOUR_LOCAL  = 18;  // 18:00
     const startedText = "C'est parti !";
-    const pad = n => String(n).padStart(2,"0");
+    const pad = n => String(n).padStart(2, "0");
 
+    // ===== Compte à rebours
     function renderCountdown(ms){
       const el = document.getElementById("countdown");
       if(ms <= 0){ el.innerHTML = `<div class="started">${startedText}</div>`; return; }
@@ -148,40 +145,63 @@
     tick();
     const timer = setInterval(()=>{ tick(); if(new Date()>=eventDate) clearInterval(timer); }, 1000);
 
-    // Toggle Line-up
+    // ===== Toggle Line-up
     const toggleBtn = document.getElementById('toggleLineup');
     const lineup = document.getElementById('lineup');
     toggleBtn.addEventListener('click',()=>{
       const hidden = lineup.getAttribute('hidden-content')==='true';
-      if(hidden){
-        lineup.setAttribute('hidden-content','false'); toggleBtn.textContent='Replier'; toggleBtn.setAttribute('aria-expanded','true');
-      }else{
-        lineup.setAttribute('hidden-content','true'); toggleBtn.textContent='Déplier'; toggleBtn.setAttribute('aria-expanded','false');
-      }
+      if(hidden){ lineup.setAttribute('hidden-content','false'); toggleBtn.textContent='Replier'; toggleBtn.setAttribute('aria-expanded','true'); }
+      else{ lineup.setAttribute('hidden-content','true'); toggleBtn.textContent='Déplier'; toggleBtn.setAttribute('aria-expanded','false'); }
     });
 
-    // Image de fond avec anti-cache (Flyer V4)
-    const flyer = "./Fly6122025_V4.jpg";
-    const version = Date.now();
-    document.body.style.backgroundImage = `url("${flyer}?v=${version}")`;
+    // ===== Anti-cache du flyer (utilise bien Fly6122025.jpg à la racine)
+    const flyer = "./Fly6122025.jpg";
+    document.body.style.backgroundImage = `url("${flyer}?v=${Date.now()}")`;
 
-    // 🔍 Compteur invisible via hits.sh (aucun compte requis)
-    // Remplace HITS_PATH_ICI par l'URL/chemin public qui sert ta page (sans le https://)
-    // Exemples:
-    // - "davidlagon.github.io/Equinox-Reborn/"
-    // - "tondomaine.fr/equinox/"
-    const HITS_PATH = "HITS_PATH_ICI";
-    const img = document.createElement('img');
-    img.src = `https://hits.sh/${encodeURIComponent(HITS_PATH)}.svg?style=flat-square`;
-    img.alt = "";
-    img.referrerPolicy = "no-referrer";
-    // on le rend invisible
-    img.style.position = "absolute";
-    img.style.width = "1px";
-    img.style.height = "1px";
-    img.style.opacity = "0";
-    img.style.pointerEvents = "none";
-    document.body.appendChild(img);
+    // ===== Révélation sécurisée du lieu à J-6 18:00 via location.json
+    const locationEl   = document.getElementById('location');
+    const LOCATION_URL = './location.json'; // créé par ton workflow à J-6
+    const REVEAL_POLL_MS = 30000;
+
+    const revealAt = (() => {
+      const d = new Date(eventDate);
+      d.setDate(d.getDate() - REVEAL_DAYS_BEFORE);
+      d.setHours(REVEAL_HOUR_LOCAL, 0, 0, 0);
+      return d;
+    })();
+
+    async function tryRevealLocation(){
+      if(new Date() < revealAt) return false;
+      try{
+        const res = await fetch(`${LOCATION_URL}?v=${Date.now()}`, { cache: "no-store" });
+        if(res.ok){
+          const data = await res.json();
+          if(data?.html){ locationEl.innerHTML = data.html; return true; }
+          if(data?.location){ locationEl.textContent = data.location; return true; }
+        }
+      }catch(e){}
+      return false;
+    }
+
+    (function scheduleReveal(){
+      const delay = Math.max(0, revealAt - new Date());
+      setTimeout(async ()=>{
+        if(await tryRevealLocation()) return;
+        const iv = setInterval(async ()=>{
+          if(await tryRevealLocation()) clearInterval(iv);
+        }, REVEAL_POLL_MS);
+      }, delay);
+    })();
+
+    // ===== (Optionnel) Compteur hits.sh : remplace HITS_PATH_ICI par l’URL de ta page, ou supprime ces lignes
+    const HITS_PATH = "HITS_PATH_ICI"; // ex: "DavidLagon.github.io/Equinox-Reborn/"
+    if(HITS_PATH !== "HITS_PATH_ICI"){
+      const img = document.createElement('img');
+      img.src = `https://hits.sh/${encodeURIComponent(HITS_PATH)}.svg?style=flat-square`;
+      img.alt = ""; img.referrerPolicy = "no-referrer";
+      img.style.position="absolute"; img.style.width="1px"; img.style.height="1px"; img.style.opacity="0"; img.style.pointerEvents="none";
+      document.body.appendChild(img);
+    }
   </script>
 </body>
 </html>

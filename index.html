@@ -161,22 +161,20 @@
     const flyer = "./Fly6122025.jpg";
     document.body.style.backgroundImage = `url("${flyer}?v=${Date.now()}")`;
 
-    // ===== Révélation sécurisée du lieu à J-6 18:00 via location.json
+    // ===== Révélation sécurisée du lieu via location.json
     const locationEl   = document.getElementById('location');
-    const LOCATION_URL = './location.json'; // créé par ton workflow à J-6
+    const LOCATION_URL = './location.json';
     const REVEAL_POLL_MS = 30000;
 
     const revealAt = (() => {
-  if (typeof FORCE_REVEAL !== "undefined" && FORCE_REVEAL) {
-    // Simule que la date de révélation est déjà passée
-    return new Date(Date.now() - 60 * 1000);
-  }
-  const d = new Date(eventDate);
-  d.setDate(d.getDate() - REVEAL_DAYS_BEFORE);
-  d.setHours(REVEAL_HOUR_LOCAL, 0, 0, 0);
-  return d;
-})();
-
+      if (typeof FORCE_REVEAL !== "undefined" && FORCE_REVEAL) {
+        return new Date(Date.now() - 60 * 1000); // reveal immédiat en mode test
+      }
+      const d = new Date(eventDate);
+      d.setDate(d.getDate() - REVEAL_DAYS_BEFORE);
+      d.setHours(REVEAL_HOUR_LOCAL, 0, 0, 0);
+      return d;
+    })();
 
     async function tryRevealLocation(){
       if(new Date() < revealAt) return false;
@@ -184,8 +182,13 @@
         const res = await fetch(`${LOCATION_URL}?v=${Date.now()}`, { cache: "no-store" });
         if(res.ok){
           const data = await res.json();
-          if(data?.html){ locationEl.innerHTML = data.html; return true; }
-          if(data?.location){ locationEl.textContent = data.location; return true; }
+          if (data?.html) { locationEl.innerHTML = data.html; return true; }
+          if (data?.location) {
+            // si 'location' contient du HTML, on l'injecte, sinon texte simple
+            if (/<[a-z][\s\S]*>/i.test(data.location)) locationEl.innerHTML = data.location;
+            else locationEl.textContent = data.location;
+            return true;
+          }
         }
       }catch(e){}
       return false;
@@ -201,7 +204,7 @@
       }, delay);
     })();
 
-    // ===== (Optionnel) Compteur hits.sh : remplace HITS_PATH_ICI par l’URL de ta page, ou supprime ces lignes
+    // ===== (Optionnel) Compteur hits.sh : renseigne ton URL ou supprime
     const HITS_PATH = "HITS_PATH_ICI"; // ex: "DavidLagon.github.io/Equinox-Reborn/"
     if(HITS_PATH !== "HITS_PATH_ICI"){
       const img = document.createElement('img');

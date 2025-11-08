@@ -1,16 +1,13 @@
 name: Reveal Location (J-6 18:00 Europe/Paris)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}   # lancement manuel
 
 jobs:
   reveal:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up job
-        run: echo "Starting reveal process..."
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -22,18 +19,22 @@ jobs:
             exit 1
           fi
 
-      - name: Write location.json from secrets
+      - name: Install jq
         run: |
-          mkdir -p .
-          # Priorité à LOCATION_HTML si elle existe, sinon LOCATION_VALUE
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Write location.json from secrets (safe JSON)
+        run: |
           if [ -n "${{ secrets.LOCATION_HTML }}" ]; then
-            echo "{\"html\": \"${{ secrets.LOCATION_HTML }}\"}" > location.json
+            jq -Rn --arg html "${{ secrets.LOCATION_HTML }}" '{html:$html}' > location.json
           elif [ -n "${{ secrets.LOCATION_VALUE }}" ]; then
-            echo "{\"location\": \"${{ secrets.LOCATION_VALUE }}\"}" > location.json
+            jq -Rn --arg location "${{ secrets.LOCATION_VALUE }}" '{location:$location}' > location.json
           else
             echo "❌ Missing LOCATION_HTML or LOCATION_VALUE secret."
             exit 1
           fi
+          echo "location.json:"
           cat location.json
 
       - name: Commit & push (only if changed)
@@ -41,10 +42,8 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # S'assurer que le fichier est suivi
+          # S'assurer que le fichier est suivi et détecter un vrai changement
           git add -N location.json
-
-          # Vérifie s'il y a une différence
           if git diff --quiet --exit-code -- location.json; then
             echo "✅ No changes to commit. Exiting successfully."
             exit 0
